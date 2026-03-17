@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LogiCore ERP | Live Tracking</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <style>
+      :root {
+        --panel: #ffffff;
+        --text: #16324a;
+        --muted: #5d7285;
+        --accent: #0b3f5c;
+        --accent-soft: #d7e9f2;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: linear-gradient(180deg, #eff4f7 0%, #f9fbfc 100%);
+        color: var(--text);
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: 340px 1fr;
+        min-height: 100vh;
+      }
+      .sidebar {
+        background: linear-gradient(180deg, #082032 0%, #0b3f5c 100%);
+        color: #f5fbff;
+        padding: 24px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+      .sidebar h1 {
+        margin: 0;
+        font-size: 1.55rem;
+      }
+      .sidebar .muted {
+        color: rgba(245, 251, 255, 0.78);
+        font-size: 0.95rem;
+      }
+      .select, .info-card {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        padding: 14px;
+      }
+      .select label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 0.92rem;
+      }
+      .select select {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: none;
+        background: #f5fbff;
+        color: #16324a;
+      }
+      .info-card h2 {
+        margin: 0 0 10px 0;
+        font-size: 1rem;
+      }
+      .info-list {
+        display: grid;
+        gap: 8px;
+        font-size: 0.92rem;
+      }
+      .info-list span { color: rgba(245, 251, 255, 0.75); }
+      .main {
+        padding: 18px;
+        display: grid;
+        grid-template-rows: auto 1fr;
+        gap: 16px;
+      }
+      .toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 18px;
+        background: var(--panel);
+        border-radius: 18px;
+        box-shadow: 0 12px 26px rgba(17, 34, 68, 0.08);
+      }
+      .toolbar .title {
+        font-size: 1.35rem;
+        font-weight: 700;
+      }
+      .toolbar .subtitle {
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+      .status-pill {
+        padding: 8px 12px;
+        border-radius: 999px;
+        font-weight: 700;
+        background: var(--accent-soft);
+        color: var(--accent);
+      }
+      #map {
+        width: 100%;
+        height: calc(100vh - 120px);
+        border-radius: 20px;
+        box-shadow: 0 14px 32px rgba(17, 34, 68, 0.12);
+      }
+      .truck-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: #0b3f5c;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid white;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        font-size: 16px;
+      }
+      @media (max-width: 980px) {
+        .layout { grid-template-columns: 1fr; }
+        .sidebar { min-height: auto; }
+        #map { height: 70vh; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar">
+        <div>
+          <h1>LogiCore ERP</h1>
+          <div class="muted">Mapa ao vivo da operacao logistica, independente do Streamlit.</div>
+        </div>
+        <div class="select">
+          <label for="vehicle-select">Veiculo monitorado</label>
+          <select id="vehicle-select"></select>
+        </div>
+        <div class="info-card">
+          <h2>Status operacional</h2>
+          <div class="info-list" id="vehicle-info">
+            <div><span>Veiculo:</span> --</div>
+            <div><span>Placa:</span> --</div>
+            <div><span>Velocidade:</span> --</div>
+            <div><span>Combustivel:</span> --</div>
+            <div><span>Carga:</span> --</div>
+            <div><span>Rota:</span> --</div>
+            <div><span>Atualizacao:</span> --</div>
+          </div>
+        </div>
+      </aside>
+      <main class="main">
+        <div class="toolbar">
+          <div>
+            <div class="title">Rastreamento Ao Vivo</div>
+            <div class="subtitle">Rota planejada, trecho percorrido e alertas ativos com atualizacao fluida via WebSocket.</div>
+          </div>
+          <div class="status-pill" id="connection-status">Conectando...</div>
+        </div>
+        <div id="map"></div>
+      </main>
+    </div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

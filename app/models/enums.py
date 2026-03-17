@@ -1,0 +1,16 @@
+from enum import Enum
+
+
+class OrderStatus(str, Enum):
+    PENDING = "PENDENTE"
+    PROCESSING = "PROCESSANDO"
+    IN_ROUTE = "EM_ROTA"
+    DELIVERED = "ENTREGUE"
+    CANCELLED = "CANCELADO"
+
+
+class AlertType(str, Enum):
+    ROUTE_DEVIATION = "SAIDA_ROTA"
+    OVERSPEED = "EXCESSO_VELOCIDADE"
+    LOW_FUEL = "COMBUSTIVEL_CRITICO"
+    DELIVERY_DELAY = "ATRASO_PREVISTO"
